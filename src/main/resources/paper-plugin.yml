@@ -1,0 +1,11 @@
+name: cykahd
+version: '${project.version}'
+main: glowapples.CykaHD
+api-version: '26.2'
+
+dependencies:
+  server:
+    WorldGuard:
+      load: BEFORE
+      required: true
+      join-classpath: true
