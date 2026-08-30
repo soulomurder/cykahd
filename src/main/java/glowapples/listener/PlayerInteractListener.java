@@ -44,6 +44,7 @@ public final class PlayerInteractListener implements Listener {
         ItemMeta itemMeta = item.getItemMeta();
         PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
         if (!pdc.has(TextUtil.CIG_KEY)) return false;
+        double strength = pdc.get(TextUtil.CIG_KEY, PersistentDataType.DOUBLE);
 
         Player player = event.getPlayer();
         ItemUtil.damageItem(item, 1, BREAK_SOUND, player);
@@ -59,7 +60,7 @@ public final class PlayerInteractListener implements Listener {
         for (PotionEffect effect : effects) {
             if (effect.getType() == PotionEffectType.NAUSEA) {
                 int duration = effect.getDuration();
-                int calculatedDuration = (int) Math.round(15.5 * Math.pow(duration, 0.5));
+                int calculatedDuration = (int) Math.round(strength * Math.pow(duration, 0.5));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, calculatedDuration, 0, true, true, false));
             }
         }

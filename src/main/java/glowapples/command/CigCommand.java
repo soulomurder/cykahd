@@ -26,7 +26,7 @@ public final class CigCommand implements BasicCommand {
         cig.setData(DataComponentTypes.MAX_DAMAGE, 13);
         ItemMeta meta = cig.getItemMeta();
         if (meta != null) {
-            meta.getPersistentDataContainer().set(TextUtil.CIG_KEY, PersistentDataType.INTEGER, 1);
+            meta.getPersistentDataContainer().set(TextUtil.CIG_KEY, PersistentDataType.DOUBLE, 15.5);
             cig.setItemMeta(meta);
         }
         player.getInventory().setItemInMainHand(cig);
