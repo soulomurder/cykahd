@@ -1,20 +1,22 @@
-package glowapples.worldguard;
+package glowapples;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import glowapples.util.WorldGuardUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Set;
 
-public class WorldGuardPlayer {
-    public WorldGuardPlayer(Player player) {
+public class СykaHDPlayer {
+    public СykaHDPlayer(Player player) {
         this.player = player;
         setLocation(player.getLocation());
         updateRootParentRegions();
     }
 
     private Player player;
+    private Location locationToReturn;
     private int x;
     private int y;
     private int z;
@@ -30,15 +32,15 @@ public class WorldGuardPlayer {
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public int getZ() {
-        return z;
+        return this.z;
     }
 
     public void setLocation(Location location) {
@@ -48,17 +50,31 @@ public class WorldGuardPlayer {
     }
 
     public Set<String> getRootParentRegions() {
-        return rootParentRegions;
+        return this.rootParentRegions;
     }
 
     public void updateRootParentRegions() {
+        setLocation(player.getLocation());
         List<ProtectedRegion> regions = WorldGuardUtil.getRegionsAtPlayerLocation(player);
         this.rootParentRegions = WorldGuardUtil.getRootParentRegions(regions);
-        if (rootParentRegions.contains("m")) metroStation = WorldGuardUtil.getMetroStation(regions);
-        else metroStation = null;
+        if (this.rootParentRegions.contains("m")) this.metroStation = WorldGuardUtil.getMetroStation(regions);
+        else this.metroStation = null;
+    }
+
+    public void returnPlayer() {
+        this.player.teleport(this.locationToReturn);
+        this.locationToReturn = null;
+    }
+
+    public boolean isAbleToReturn() {
+        return this.locationToReturn != null;
     }
 
     public String getMetroStation() {
-        return metroStation;
+        return this.metroStation;
+    }
+
+    public void updateLocationToReturn() {
+        this.locationToReturn = this.player.getLocation();
     }
 }

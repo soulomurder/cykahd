@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.Location;
 
-public class VehicleMoveListener implements Listener {
+public class EntityListener implements Listener {
     private final Location reuseLocation = new Location(null, 0, 0, 0);
 
     @EventHandler

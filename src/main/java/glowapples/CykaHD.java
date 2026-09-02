@@ -2,9 +2,10 @@ package glowapples;
 
 import glowapples.command.CigCommand;
 import glowapples.command.NVCommand;
+import glowapples.command.PCommand;
 import glowapples.command.ShopCommand;
-import glowapples.listener.PlayerInteractListener;
-import glowapples.listener.VehicleMoveListener;
+import glowapples.listener.PlayerListener;
+import glowapples.listener.EntityListener;
 import glowapples.util.TextUtil;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -46,6 +47,11 @@ public final class CykaHD extends JavaPlugin {
                 "shop",
                 PermissionDefault.OP)
         );
+        this.getServer().getPluginManager().addPermission(new Permission(
+                TextUtil.PERM_COMMAND_P,
+                "shop",
+                PermissionDefault.OP)
+        );
     }
 
     private void initCommands() {
@@ -61,11 +67,15 @@ public final class CykaHD extends JavaPlugin {
             final Commands registrar = event.registrar();
             registrar.register("shop", new ShopCommand());
         });
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            final Commands registrar = event.registrar();
+            registrar.register("p", new PCommand());
+        });
     }
 
     private void initListeners() {
-        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
-        getServer().getPluginManager().registerEvents(new VehicleMoveListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new EntityListener(), this);
     }
 
     private void initTimers() {

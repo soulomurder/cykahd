@@ -19,6 +19,7 @@ public final class TextUtil {
     public static final String PERM_COMMAND_NV = "cykahd.command.nv";
     public static final String PERM_COMMAND_CIG = "cykahd.command.cig";
     public static final String PERM_COMMAND_SHOP = "cykahd.command.shop";
+    public static final String PERM_COMMAND_P = "cykahd.command.p";
     // Keys
     public static final NamespacedKey CIG_KEY = new NamespacedKey(CykaHD.getInstance(), "cig");
     public static final NamespacedKey STAR_KEY = new NamespacedKey(CykaHD.getInstance(), "star");

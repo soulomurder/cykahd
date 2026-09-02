@@ -1,8 +1,8 @@
 package glowapples;
 
+import glowapples.util.EntityUtil;
 import glowapples.util.TextUtil;
-import glowapples.worldguard.WorldGuardPlayer;
-import glowapples.worldguard.WorldGuardUtil;
+import glowapples.util.WorldGuardUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,23 +15,23 @@ import java.util.*;
 public final class Timers {
     private Timers() {}
 
-    private static final Map<UUID, WorldGuardPlayer> players = new HashMap<>();
+    private static final Map<UUID, СykaHDPlayer> players = EntityUtil.players;
 
     public static void worldGuardTimer() {
         Bukkit.getScheduler().runTaskTimer(CykaHD.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 UUID uuid = player.getUniqueId();
-                WorldGuardPlayer wgPlayer = players.get(uuid);
+                СykaHDPlayer wgPlayer = players.get(uuid);
                 if (wgPlayer == null) {
-                    players.put(uuid, new WorldGuardPlayer(player));
-                    return;
+                    players.put(uuid, new СykaHDPlayer(player));
+                    continue;
                 }
+                wgPlayer.setPlayer(player);
 
                 Location location = player.getLocation();
                 if (location.getBlockX() != wgPlayer.getX()
                 || location.getBlockY() != wgPlayer.getY()
                 || location.getBlockZ() != wgPlayer.getZ()) wgPlayer.updateRootParentRegions();
-                else break;
 
                 Set<String> regions = wgPlayer.getRootParentRegions();
                 if (regions.contains("h")) giveFireworkStar(player);
@@ -70,7 +70,7 @@ public final class Timers {
         }
     }
 
-    private static void metro(WorldGuardPlayer wgPlayer) {
+    private static void metro(СykaHDPlayer wgPlayer) {
         Player player = wgPlayer.getPlayer();
 
         player.sendActionBar(TextUtil.mm.deserialize(WorldGuardUtil.getMetroStationName(wgPlayer.getMetroStation())));
@@ -78,7 +78,7 @@ public final class Timers {
         ItemStack minecart = new ItemStack(Material.MINECART);
         if (!inventory.contains(Material.MINECART)){
             if (inventory.getItemInMainHand().isEmpty()) inventory.setItemInMainHand(minecart);
-            else player.getInventory().addItem();
+            else inventory.addItem();
         }
     }
 }

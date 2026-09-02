@@ -1,5 +1,6 @@
 package glowapples.listener;
 
+import glowapples.util.EntityUtil;
 import glowapples.util.ItemUtil;
 import glowapples.util.TextUtil;
 import net.kyori.adventure.sound.Sound;
@@ -10,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,7 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
-public final class PlayerInteractListener implements Listener {
+public final class PlayerListener implements Listener {
 
     private final Sound BREAK_SOUND = Sound.sound(
         org.bukkit.Sound.BLOCK_FIRE_EXTINGUISH,
@@ -28,6 +30,11 @@ public final class PlayerInteractListener implements Listener {
         1.0F,
         2.0F
     );
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        EntityUtil.players.remove(event.getPlayer().getUniqueId());
+    }
 
     @EventHandler
     public void onRightClick(PlayerInteractEvent event) {
