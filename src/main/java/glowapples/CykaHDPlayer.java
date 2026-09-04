@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Set;
 
-public class СykaHDPlayer {
-    public СykaHDPlayer(Player player) {
+public class CykaHDPlayer {
+    public CykaHDPlayer(Player player) {
         this.player = player;
         setLocation(player.getLocation());
-        updateRootParentRegions();
+        updateRegions();
     }
 
     private Player player;
@@ -22,6 +22,7 @@ public class СykaHDPlayer {
     private int z;
     private Set<String> rootParentRegions;
     private String metroStation;
+    private String district;
 
     public Player getPlayer() {
         return player;
@@ -53,12 +54,14 @@ public class СykaHDPlayer {
         return this.rootParentRegions;
     }
 
-    public void updateRootParentRegions() {
+    public void updateRegions() {
         setLocation(player.getLocation());
         List<ProtectedRegion> regions = WorldGuardUtil.getRegionsAtPlayerLocation(player);
         this.rootParentRegions = WorldGuardUtil.getRootParentRegions(regions);
         if (this.rootParentRegions.contains("m")) this.metroStation = WorldGuardUtil.getMetroStation(regions);
         else this.metroStation = null;
+        if (this.rootParentRegions.contains("district")) this.district = WorldGuardUtil.getDistrict(regions);
+        else this.district = null;
     }
 
     public void returnPlayer() {
@@ -72,6 +75,10 @@ public class СykaHDPlayer {
 
     public String getMetroStation() {
         return this.metroStation;
+    }
+
+    public String getDistrict() {
+        return district;
     }
 
     public void updateLocationToReturn() {

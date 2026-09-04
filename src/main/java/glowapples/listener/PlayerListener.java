@@ -19,6 +19,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.stringtemplate.v4.ST;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public final class PlayerListener implements Listener {
         Sound.Source.PLAYER,
         1.0F,
         2.0F
+    );
+
+    private final Sound STAR_SOUND = Sound.sound(
+        org.bukkit.Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR,
+        Sound.Source.PLAYER,
+        1.0F,
+        1.0F
     );
 
     @EventHandler
@@ -84,15 +92,16 @@ public final class PlayerListener implements Listener {
         event.setCancelled(true);
 
         Player player = event.getPlayer();
-        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20, 79));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 10, 99));
         player.getWorld().spawnParticle(
                 Particle.CAMPFIRE_SIGNAL_SMOKE,
                 player.getLocation(),
                 1000,
-                0, 0, 0,
-                0.1
+                1, 0.3, 1,
+                0
         );
-        item.subtract();
+        player.getInventory().setItemInMainHand(new ItemStack(Material.FIREWORK_ROCKET));
+        player.playSound(STAR_SOUND);
 
         ItemStack elytra = new ItemStack(Material.ELYTRA);
         ItemStack oldChestplate = player.getInventory().getChestplate();

@@ -7,46 +7,67 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.w3c.dom.Text;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public final class WorldGuardUtil {
     private WorldGuardUtil() {}
 
-    private static final Map<String, String> stationNames = new HashMap<>();
+    private static final Map<String, net.kyori.adventure.text.Component> stationNames = new HashMap<>();
+    private static final Map<String, net.kyori.adventure.text.Component> districtNames = new HashMap<>();
 
     static {
-        stationNames.put("m_an", "<gray>Станция </gray><gold>Агентство недвижимости</gold>");
-        stationNames.put("m_downtown", "<gray>Станция </gray><green>Верхний город</green>");
-        stationNames.put("m_dv", "<gray>Станция </gray><green>Долина времени</green>");
-        stationNames.put("m_ffi", "<gray>Станция </gray><gold>Фуфелшмерц Фарма inc.</gold>");
-        stationNames.put("m_govn", "<gray>Станция </gray><red>Грибной овраг водоструйного насоса</red>");
-        stationNames.put("m_hom", "<gray>Станция </gray><gold>House of memories</gold>");
-        stationNames.put("m_hom_", "<gray>Станция </gray><aqua>House of memories</aqua>");
-        stationNames.put("m_k", "<gray>Станция </gray><gold>Кикомару</gold>");
-        stationNames.put("m_kd", "<gray>Станция </gray><gold>Конвейерная деревня</gold>");
-        stationNames.put("m_ki", "<gray>Станция </gray><green>Купол игроков<green>");
-        stationNames.put("m_kr", "<gray>Станция </gray><red>Конец радуги</red>");
-        stationNames.put("m_kr_", "<gray>Станция </gray><green>Конец радуги</green>");
-        stationNames.put("m_m", "<gray>Станция </gray><aqua>Монополия</aqua>");
-        stationNames.put("m_nc", "<gray>Станция </gray><gold>Набережные члены</gold>");
-        stationNames.put("m_ni", "<gray>Станция </gray><green>Нищая интеллигенция</green>");
-        stationNames.put("m_nntnvls", "<gray>Станция </gray><green>Ну нихуя ты настя в лагерь съездила</green>");
-        stationNames.put("m_oobh", "<gray>Станция </gray><red>Университет ОГБ</red>");
-        stationNames.put("m_pd", "<gray>Станция </gray><gold>Пятая деревня</gold>");
-        stationNames.put("m_pe", "<gray>Станция </gray><red>Пизда Елены</red>");
-        stationNames.put("m_pvp", "<gray>Станция </gray><red>Парк вредных привычек</red>");
-        stationNames.put("m_pvp_", "<gray>Станция </gray><green>Парк вредных привычек</green>");
-        stationNames.put("m_s", "<gray>Станция </gray><green>Сплиф</green>");
-        stationNames.put("m_s_", "<gray>Станция </gray><aqua>Сплиф</aqua>");
-        stationNames.put("m_sk", "<gray>Станция </gray><aqua>Смешная кошка</aqua>");
-        stationNames.put("m_tl", "<gray>Станция </gray><red>Тёмный лес</red>");
-        stationNames.put("m_tl_", "<gray>Станция </gray><gold>Тёмный лес</gold>");
-        stationNames.put("m_vg", "<gray>Станция </gray><green>Врата города</green>");
-        stationNames.put("m_vgz", "<gray>Станция </gray><green>В Германии жарко</green>");
-        stationNames.put("m_zzl", "<gray>Станция </gray><gold>Замкадье заходящей луны</gold>");
+        stationNames.put("m_an", TextUtil.AN_STATION);
+        stationNames.put("m_downtown", TextUtil.DOWNTOWN_STATION);
+        stationNames.put("m_dv", TextUtil.DV_STATION);
+        stationNames.put("m_ffi", TextUtil.FFI_STATION);
+        stationNames.put("m_govn", TextUtil.GOVN_STATION);
+        stationNames.put("m_hom", TextUtil.HOM_STATION);
+        stationNames.put("m_hom_", TextUtil.HOM__STATION);
+        stationNames.put("m_k", TextUtil.K_STATION);
+        stationNames.put("m_kd", TextUtil.KD_STATION);
+        stationNames.put("m_ki", TextUtil.KI_STATION);
+        stationNames.put("m_kr", TextUtil.KR_STATION);
+        stationNames.put("m_kr_", TextUtil.KR__STATION);
+        stationNames.put("m_m", TextUtil.M_STATION);
+        stationNames.put("m_nc", TextUtil.NC_STATION);
+        stationNames.put("m_ni", TextUtil.NI_STATION);
+        stationNames.put("m_nntnvls", TextUtil.NNTNVLS_STATION);
+        stationNames.put("m_oobh", TextUtil.OOBH_STATION);
+        stationNames.put("m_pd", TextUtil.PD_STATION);
+        stationNames.put("m_pe", TextUtil.PE_STATION);
+        stationNames.put("m_pvp", TextUtil.PVP_STATION);
+        stationNames.put("m_pvp_", TextUtil.PVP__STATION);
+        stationNames.put("m_s", TextUtil.S_STATION);
+        stationNames.put("m_s_", TextUtil.S__STATION);
+        stationNames.put("m_sk", TextUtil.SK_STATION);
+        stationNames.put("m_tl", TextUtil.TL_STATION);
+        stationNames.put("m_tl_", TextUtil.TL__STATION);
+        stationNames.put("m_vg", TextUtil.VG_STATION);
+        stationNames.put("m_vgz", TextUtil.VGZ_STATION);
+        stationNames.put("m_zzl", TextUtil.ZZL_STATION);
+
+        districtNames.put("zzl", TextUtil.ZZL_DISTRICT);
+        districtNames.put("downtown", TextUtil.DOWNTOWN_DISTRICT);
+        districtNames.put("govn", TextUtil.GOVN_DISTRICT);
+        districtNames.put("vgz", TextUtil.VGZ_DISTRICT);
+        districtNames.put("kd", TextUtil.KD_DISTRICT);
+        districtNames.put("pe", TextUtil.PE_DISTRICT);
+        districtNames.put("nc", TextUtil.NC_DISTRICT);
+        districtNames.put("dv", TextUtil.DV_DISTRICT);
+        districtNames.put("kr", TextUtil.KR_DISTRICT);
+        districtNames.put("oobh", TextUtil.OOBH_DISTRICT);
+        districtNames.put("nntnvls", TextUtil.NNTNVLS_DISTRICT);
+        districtNames.put("sd", TextUtil.SD_DISTRICT);
+        districtNames.put("nbn", TextUtil.NBN_DISTRICT);
+        districtNames.put("ni", TextUtil.NI_DISTRICT);
+        districtNames.put("pvp", TextUtil.PVP_DISTRICT);
     }
 
     public static List<ProtectedRegion> getRegionsAtPlayerLocation(Player player) {
@@ -60,12 +81,6 @@ public final class WorldGuardUtil {
         for (ProtectedRegion region : regionSet) regions.add(region);
 
         return regions;
-    }
-
-    public static List<ProtectedRegion> filterOnlyParentRegions(List<ProtectedRegion> originalRegions) {
-        return originalRegions.stream()
-                .filter(region -> region.getParent() == null)
-                .collect(Collectors.toList());
     }
 
     public static Set<String> getRootParentRegions(List<ProtectedRegion> regions) {
@@ -89,7 +104,20 @@ public final class WorldGuardUtil {
         return null;
     }
 
-    public static String getMetroStationName(String station) {
+    public static String getDistrict(List<ProtectedRegion> regions) {
+        if (regions == null || regions.isEmpty()) return null;
+        for (ProtectedRegion region : regions) {
+            ProtectedRegion parent = region.getParent();
+            if (parent != null && parent.getId().equals("district")) return region.getId();
+        }
+        return null;
+    }
+
+    public static Component getMetroStationName(String station) {
         return stationNames.get(station);
+    }
+
+    public static Component getDistrictName(String district) {
+        return districtNames.get(district);
     }
 }

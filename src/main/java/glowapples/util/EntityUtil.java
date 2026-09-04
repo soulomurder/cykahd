@@ -1,6 +1,6 @@
 package glowapples.util;
 
-import glowapples.СykaHDPlayer;
+import glowapples.CykaHDPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.UUID;
 public final class EntityUtil {
     private EntityUtil() {}
 
-    public static final Map<UUID, СykaHDPlayer> players = new HashMap<>();
+    public static final Map<UUID, CykaHDPlayer> players = new HashMap<>();
 
     public static <T> T getNearestEntity(Location loc, double radius, Class<T> type) {
         if (loc == null || loc.getWorld() == null || type == null) return null;

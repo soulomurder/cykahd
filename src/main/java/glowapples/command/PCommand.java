@@ -2,7 +2,7 @@ package glowapples.command;
 
 import glowapples.util.EntityUtil;
 import glowapples.util.TextUtil;
-import glowapples.СykaHDPlayer;
+import glowapples.CykaHDPlayer;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.kyori.adventure.text.Component;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public final class PCommand implements BasicCommand {
 
-    private final Map<UUID, СykaHDPlayer> players = EntityUtil.players;
+    private final Map<UUID, CykaHDPlayer> players = EntityUtil.players;
     private final Component P_SET_MESSAGE = TextUtil.mm.deserialize("<gold>Точка возвращения установлена</gold>");
 
     @Override
@@ -29,7 +29,7 @@ public final class PCommand implements BasicCommand {
             return;
         }
 
-        СykaHDPlayer cykaHDPlayer = players.get(player.getUniqueId());
+        CykaHDPlayer cykaHDPlayer = players.get(player.getUniqueId());
         if (cykaHDPlayer.isAbleToReturn()) {
             player.getWorld().spawnParticle(
                     Particle.PALE_OAK_LEAVES,

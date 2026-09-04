@@ -15,33 +15,38 @@ import java.util.*;
 public final class Timers {
     private Timers() {}
 
-    private static final Map<UUID, СykaHDPlayer> players = EntityUtil.players;
+    private static final Map<UUID, CykaHDPlayer> players = EntityUtil.players;
 
     public static void worldGuardTimer() {
         Bukkit.getScheduler().runTaskTimer(CykaHD.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 UUID uuid = player.getUniqueId();
-                СykaHDPlayer wgPlayer = players.get(uuid);
-                if (wgPlayer == null) {
-                    players.put(uuid, new СykaHDPlayer(player));
+                CykaHDPlayer cykaHDPlayer = players.get(uuid);
+                if (cykaHDPlayer == null) {
+                    players.put(uuid, new CykaHDPlayer(player));
                     continue;
                 }
-                wgPlayer.setPlayer(player);
+                cykaHDPlayer.setPlayer(player);
 
                 Location location = player.getLocation();
-                if (location.getBlockX() != wgPlayer.getX()
-                || location.getBlockY() != wgPlayer.getY()
-                || location.getBlockZ() != wgPlayer.getZ()) wgPlayer.updateRootParentRegions();
+                String oldDistrict = cykaHDPlayer.getDistrict();
+                if (location.getBlockX() != cykaHDPlayer.getX()
+                || location.getBlockY() != cykaHDPlayer.getY()
+                || location.getBlockZ() != cykaHDPlayer.getZ()) cykaHDPlayer.updateRegions();
 
-                Set<String> regions = wgPlayer.getRootParentRegions();
+                Set<String> regions = cykaHDPlayer.getRootParentRegions();
+                String newDistrict = cykaHDPlayer.getDistrict();
                 if (regions.contains("h")) giveFireworkStar(player);
-                if (wgPlayer.getMetroStation() != null) metro(wgPlayer);
+                if (cykaHDPlayer.getMetroStation() != null) metro(cykaHDPlayer);
+                if (newDistrict != null && !newDistrict.equals(oldDistrict)) district(cykaHDPlayer);
             }
         }, 0L, 10L);
     }
 
     private static void giveFireworkStar(Player player) {
-        for (ItemStack item : player.getInventory().getContents()) {
+        PlayerInventory inventory = player.getInventory();
+
+        for (ItemStack item : inventory.getContents()) {
             if (item != null && item.getType() == Material.FIREWORK_STAR && item.hasItemMeta()) {
                 if (item.getItemMeta().getPersistentDataContainer().has(TextUtil.STAR_KEY, PersistentDataType.BYTE)) {
                     return;
@@ -49,7 +54,10 @@ public final class Timers {
             }
         }
 
-        ItemStack star = new ItemStack(Material.FIREWORK_STAR);
+        ItemStack star = inventory.getItemInMainHand();
+        if (!star.isEmpty()) return;
+
+        star = new ItemStack(Material.FIREWORK_STAR);
         FireworkEffectMeta meta = (FireworkEffectMeta) star.getItemMeta();
 
         if (meta != null) {
@@ -64,21 +72,24 @@ public final class Timers {
             meta.getPersistentDataContainer().set(TextUtil.STAR_KEY, PersistentDataType.BYTE, (byte) 1);
             star.setItemMeta(meta);
         }
-
-        if (!player.getInventory().addItem(star).isEmpty()) {
-            player.getWorld().dropItemNaturally(player.getLocation(), star);
-        }
+        inventory.setItemInMainHand(star);
     }
 
-    private static void metro(СykaHDPlayer wgPlayer) {
-        Player player = wgPlayer.getPlayer();
+    private static void metro(CykaHDPlayer cykaHDPlayer) {
+        Player player = cykaHDPlayer.getPlayer();
 
-        player.sendActionBar(TextUtil.mm.deserialize(WorldGuardUtil.getMetroStationName(wgPlayer.getMetroStation())));
+        player.sendActionBar(WorldGuardUtil.getMetroStationName(cykaHDPlayer.getMetroStation()));
         PlayerInventory inventory = player.getInventory();
         ItemStack minecart = new ItemStack(Material.MINECART);
         if (!inventory.contains(Material.MINECART)){
             if (inventory.getItemInMainHand().isEmpty()) inventory.setItemInMainHand(minecart);
             else inventory.addItem();
         }
+    }
+
+    private static void district(CykaHDPlayer cykaHDPlayer) {
+        Player player = cykaHDPlayer.getPlayer();
+
+        player.sendActionBar(WorldGuardUtil.getDistrictName(cykaHDPlayer.getDistrict()));
     }
 }

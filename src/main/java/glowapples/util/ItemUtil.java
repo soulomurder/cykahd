@@ -1,16 +1,9 @@
 package glowapples.util;
 
-import glowapples.CykaHD;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkEffectMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 public final class ItemUtil {
     private ItemUtil() {}
